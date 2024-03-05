@@ -1,65 +1,62 @@
 ﻿using System;
-using System.Linq;
+using System.Web;
 using System.Windows;
+using System.Windows.Controls;
+using IdentityModel.Client;
 
 namespace LoginWithKeycloak
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-   public partial class MainWindow : Window
+    public partial class MainWindow : Window
     {
-        private const string KeycloakUrl = "http://localhost:8080/realms/AnishTestRealm";
+        private const string KeycloakUrl = "http://localhost:8080/";
         private const string ClientId = "WPFAPP";
+        private const string ClientSecret = "UYggTukD6J9y6pukl9vB39FlaJQq9KEg";
         private const string RedirectUri = "http://localhost:8081/callback";
+        private const string RealmName = "AnishTestRealm";
+
+        private readonly KeycloakClient _keycloakClient;
 
         public MainWindow()
         {
             InitializeComponent();
+            _keycloakClient = new KeycloakClient(KeycloakUrl, ClientId, ClientSecret);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            AuthBrowser.Navigated += (s, args) =>
+            // Redirect the user to the Keycloak login page
+            var loginUrl = $"{KeycloakUrl}/realms/{RealmName}/protocol/openid-connect/auth?response_type=code&client_id={ClientId}&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}&scope=openid%20profile%20email";
+            Browser.Navigate(new Uri(loginUrl));
+        }
+
+        private async void Browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            // Check if the URL contains the authorization code
+            if (e.Uri.AbsoluteUri.StartsWith(RedirectUri))
             {
-                // Check if the URL matches the redirect URI
-                if (args.Uri.AbsoluteUri.StartsWith(RedirectUri))
+                var uri = new Uri(e.Uri.AbsoluteUri);
+                var query = HttpUtility.ParseQueryString(uri.Query);
+                var code = query.Get("code");
+
+                if (!string.IsNullOrEmpty(code))
                 {
-                    // Extract query parameters manually
-                    var uri = args.Uri;
-                    var query = uri.Query.TrimStart('?');
-                    var queryStringParams = query.Split('&')
-                        .Select(p => p.Split('='))
-                        .ToDictionary(p => Uri.UnescapeDataString(p[0]), p => Uri.UnescapeDataString(p[1]));
+                    // Exchange the authorization code for tokens
+                    var (accessToken, idToken) = await _keycloakClient.GetTokensAsync(code, RedirectUri);
 
-                    // Get the authorization code from the query parameters
-                    var code = queryStringParams["code"];
-
-                    // Complete the authentication flow using the authorization code
-                    // For example, send the code to your server to exchange for tokens
-                    // Handle the code as per your authentication flow requirements
-                    MessageBox.Show("Authentication successful! Authorization code: " + code);
+                    // Use the access token and ID token as needed
+                    MessageBox.Show($"Access Token: {accessToken}\nID Token: {idToken}");
                 }
-            };
-
-            // Load the Keycloak login page in the WebBrowser control
-            AuthBrowser.Navigate(new Uri($"{KeycloakUrl}/protocol/openid-connect/auth?response_type=code&client_id={ClientId}&redirect_uri={RedirectUri}&scope=openid%20profile%20email"));
-        }
-
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Reload the Keycloak login page in the WebBrowser control
-            try
-            {
-                AuthBrowser.Navigate(new Uri($"{KeycloakUrl}/protocol/openid-connect/auth?response_type=code&client_id={ClientId}&redirect_uri={RedirectUri}&scope=openid%20profile%20email"));
-
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                throw;
             }
         }
+    }
+
+    public class TokenResponse
+    {
+        public string AccessToken { get; set; }
+        public string IdToken { get; set; }
     }
 }
 
