@@ -7,13 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <WebBrowser x:Name="AuthBrowser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-            <Button Content="Login with Keycloak" Click="LoginButton_Click" Grid.Row="1" Margin="5" HorizontalAlignment="Center"/>
-        </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <WebBrowser x:Name="Browser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Navigated="Browser_Navigated"/>
+        <Button Content="Login" Click="LoginButton_Click" Grid.Row="1" HorizontalAlignment="Center" Margin="5"/>
     </Grid>
 </Window>
