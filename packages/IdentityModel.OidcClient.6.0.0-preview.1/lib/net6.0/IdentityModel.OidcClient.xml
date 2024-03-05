@@ -1,0 +1,1038 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IdentityModel.OidcClient</name>
+    </assembly>
+    <members>
+        <member name="M:IdentityModel.OidcClient.AuthorizeClient.#ctor(IdentityModel.OidcClient.OidcClientOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.AuthorizeClient"/> class.
+            </summary>
+            <param name="options">The options.</param>
+        </member>
+        <member name="T:IdentityModel.OidcClient.AuthorizeState">
+            <summary>
+            Represents the state the needs to be hold between starting the authorize request and the response
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.AuthorizeState.StartUrl">
+            <summary>
+            Gets or sets the start URL.
+            </summary>
+            <value>
+            The start URL.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.AuthorizeState.State">
+            <summary>
+            Gets or sets the state.
+            </summary>
+            <value>
+            The state.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.AuthorizeState.CodeVerifier">
+            <summary>
+            Gets or sets the code verifier.
+            </summary>
+            <value>
+            The code verifier.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.AuthorizeState.RedirectUri">
+            <summary>
+            Gets or sets the redirect URI.
+            </summary>
+            <value>
+            The redirect URI.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Browser.BrowserOptions">
+            <summary>
+            Options for the browser used for login.
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserOptions.StartUrl">
+            <summary>
+            Gets the start URL.
+            </summary>
+            <value>
+            The start URL.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserOptions.EndUrl">
+            <summary>
+            Gets the end URL.
+            </summary>
+            <value>
+            The end URL.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserOptions.DisplayMode">
+            <summary>
+            Gets or sets the browser display mode.
+            </summary>
+            <value>
+            The display mode.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserOptions.Timeout">
+            <summary>
+            Gets or sets the browser timeout.
+            </summary>
+            <value>
+            The timeout.
+            </value>
+        </member>
+        <member name="M:IdentityModel.OidcClient.Browser.BrowserOptions.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.Browser.BrowserOptions"/> class.
+            </summary>
+            <param name="startUrl">The start URL.</param>
+            <param name="endUrl">The end URL.</param>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Browser.BrowserResult">
+            <summary>
+            The result from a browser login.
+            </summary>
+            <seealso cref="T:IdentityModel.OidcClient.Result" />
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserResult.ResultType">
+            <summary>
+            Gets or sets the type of the result.
+            </summary>
+            <value>
+            The type of the result.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Browser.BrowserResult.Response">
+            <summary>
+            Gets or sets the response.
+            </summary>
+            <value>
+            The response.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Browser.BrowserResultType">
+            <summary>
+            Possible browser results.
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.BrowserResultType.Success">
+            <summary>
+            success
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.BrowserResultType.HttpError">
+            <summary>
+            HTTP error
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.BrowserResultType.UserCancel">
+            <summary>
+            user cancel
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.BrowserResultType.Timeout">
+            <summary>
+            timeout
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.BrowserResultType.UnknownError">
+            <summary>
+            unknown error
+            </summary>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Browser.DisplayMode">
+            <summary>
+            Browser display mode
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.DisplayMode.Visible">
+            <summary>
+            visible
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Browser.DisplayMode.Hidden">
+            <summary>
+            hidden
+            </summary>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Browser.IBrowser">
+            <summary>
+            Models a browser
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.Browser.IBrowser.InvokeAsync(IdentityModel.OidcClient.Browser.BrowserOptions,System.Threading.CancellationToken)">
+            <summary>
+            Invokes the browser.
+            </summary>
+            <param name="options">The options.</param>
+            <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns></returns>
+        </member>
+        <member name="T:IdentityModel.OidcClient.IIdentityTokenValidator">
+            <summary>
+            Models pluggable identity token validation
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.IIdentityTokenValidator.ValidateAsync(System.String,IdentityModel.OidcClient.OidcClientOptions,System.Threading.CancellationToken)">
+            <summary>
+            Validates an identity token
+            </summary>
+            <param name="identityToken"></param>
+            <param name="options"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Infrastructure.LogSerializer">
+            <summary>
+            Helper to JSON serialize object data for logging.
+            </summary>
+        </member>
+        <member name="F:IdentityModel.OidcClient.Infrastructure.LogSerializer.Enabled">
+            <summary>
+            Allows log serialization to be disabled, for example, for platforms
+            that don't support serialization of arbitrary objects to JSON.
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.Infrastructure.LogSerializer.Serialize(System.Object)">
+            <summary>
+            Serializes the specified object.
+            </summary>
+            <param name="logObject">The object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.Infrastructure.LogSerializer.Serialize``1(``0)">
+            <summary>
+            Serializes the specified object.
+            </summary>
+            <param name="logObject">The object.</param>
+            <returns></returns>
+        </member>
+        <member name="T:IdentityModel.OidcClient.NoValidationIdentityTokenValidator">
+            <inheritdoc />
+        </member>
+        <member name="M:IdentityModel.OidcClient.NoValidationIdentityTokenValidator.ValidateAsync(System.String,IdentityModel.OidcClient.OidcClientOptions,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:IdentityModel.OidcClient.OidcClient">
+            <summary>
+            OpenID Connect client
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClient.Options">
+            <summary>
+            Gets the options.
+            </summary>
+            <value>
+            The options.
+            </value>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.#ctor(IdentityModel.OidcClient.OidcClientOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.OidcClient"/> class.
+            </summary>
+            <param name="options">The options.</param>
+            <exception cref="T:System.ArgumentNullException">options</exception>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.LoginAsync(IdentityModel.OidcClient.LoginRequest,System.Threading.CancellationToken)">
+            <summary>
+            Starts a login.
+            </summary>
+            <param name="request">The login request.</param>
+            <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns></returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.PrepareLoginAsync(IdentityModel.Client.Parameters,System.Threading.CancellationToken)">
+            <summary>
+            Prepares the login request.
+            </summary>
+            <param name="frontChannelParameters">extra parameters to send to the authorize endpoint.</param>
+            /// <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns>State for initiating the authorize request and processing the response</returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.PrepareLogoutAsync(IdentityModel.OidcClient.LogoutRequest,System.Threading.CancellationToken)">
+            <summary>
+            Creates a logout URL.
+            </summary>
+            <param name="request">The logout request.</param>
+            /// <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns></returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.LogoutAsync(IdentityModel.OidcClient.LogoutRequest,System.Threading.CancellationToken)">
+            <summary>
+            Starts a logout.
+            </summary>
+            <param name="request">The logout request.</param>
+            <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns></returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.ProcessResponseAsync(System.String,IdentityModel.OidcClient.AuthorizeState,IdentityModel.Client.Parameters,System.Threading.CancellationToken)">
+            <summary>
+            Processes the authorize response.
+            </summary>
+            <param name="data">The response data.</param>
+            <param name="state">The state.</param>
+            <param name="backChannelParameters">Parameters for back-channel call</param>
+            <param name="cancellationToken">A token that can be used to cancel the request</param>
+            <returns>
+            Result of the login response validation
+            </returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.GetUserInfoAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the user claims from the userinfo endpoint.
+            </summary>
+            <param name="accessToken">The access token.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>
+            User claims
+            </returns>
+            <exception cref="T:System.ArgumentNullException">accessToken</exception>
+            <exception cref="T:System.InvalidOperationException">No userinfo endpoint specified</exception>
+        </member>
+        <member name="M:IdentityModel.OidcClient.OidcClient.RefreshTokenAsync(System.String,IdentityModel.Client.Parameters,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Refreshes an access token.
+            </summary>
+            <param name="refreshToken">The refresh token.</param>
+            <param name="backChannelParameters">Back-channel parameters</param>
+            <param name="scope">Space separated list of the requested scopes.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>
+            A token response.
+            </returns>
+        </member>
+        <member name="T:IdentityModel.OidcClient.OidcClientOptions">
+            <summary>
+            Configuration options for OidcClient
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.Authority">
+            <summary>
+            Gets or sets the authority.
+            </summary>
+            <value>
+            The authority.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.ProviderInformation">
+            <summary>
+            Gets or sets the provider information.
+            </summary>
+            <value>
+            The provider information.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.ClientId">
+            <summary>
+            Gets or sets the client identifier (required).
+            </summary>
+            <value>
+            The client identifier.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.ClientSecret">
+            <summary>
+            Gets or sets the client secret (if needed).
+            </summary>
+            <value>
+            The client secret.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.ClientAssertion">
+            <summary>
+            Gets or sets the client assertion (if needed).
+            </summary>
+            <value>
+            The client assertion.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.Scope">
+            <summary>
+            Gets or sets the scopes (required).
+            </summary>
+            <value>
+            The scope.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.Resource">
+            <summary>
+            Gets or sets the resource (optional)
+            </summary>
+            <value>
+            The scope.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.RedirectUri">
+            <summary>
+            Gets or sets the redirect URI (required).
+            </summary>
+            <value>
+            The redirect URI.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.PostLogoutRedirectUri">
+            <summary>
+            Gets or sets the post logout redirect URI.
+            </summary>
+            <value>
+            The post logout redirect URI.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.StateLength">
+            <summary>
+            Gets or sets the state length.
+            </summary>
+            <value>
+            The state length.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.Browser">
+            <summary>
+            Gets or sets the browser implementation.
+            </summary>
+            <value>
+            The browser.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.BrowserTimeout">
+            <summary>
+            Gets or sets the timeout for browser invisible mode.
+            </summary>
+            <value>
+            The browser invisible timeout.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.ClockSkew">
+            <summary>
+            Gets or sets the clock skew for validating identity tokens.
+            </summary>
+            <value>
+            The clock skew.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.RefreshDiscoveryDocumentForLogin">
+            <summary>
+            Gets or sets a value indicating whether the discovery document is re-loaded for every login/prepare login request
+            </summary>
+            <value>
+            <c>true</c> if discovery document needs to be re-loaded; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.RefreshDiscoveryOnSignatureFailure">
+            <summary>
+            Gets or sets a value indicating whether the discovery document gets re-loaded when token validation fails due to signing key problems
+            </summary>
+            <value>
+            <c>true</c> if discovery get re-loaded; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.LoadProfile">
+            <summary>
+            Gets or sets a value indicating whether claims are loaded from the userinfo endpoint
+            </summary>
+            <value>
+              <c>true</c> for loading claims from userinfo; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.FilterClaims">
+            <summary>
+            Gets or sets a value indicating whether to filter claims.
+            </summary>
+            <value>
+              <c>true</c> if claims are filtered; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.RefreshTokenInnerHttpHandler">
+            <summary>
+            Gets or sets the inner HTTP handler used with RefreshTokenHandler.
+            </summary>
+            <value>
+            The handler.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.BackchannelHandler">
+            <summary>
+            Gets or sets the HTTP handler used for back-channel communication (token and userinfo endpoint).
+            </summary>
+            <value>
+            The backchannel handler.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.BackchannelTimeout">
+            <summary>
+            Gets or sets the backchannel timeout.
+            </summary>
+            <value>
+            The backchannel timeout.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.HttpClientFactory">
+            <summary>
+            Gets or sets the HTTP client factory.
+            </summary>
+            <value>
+            The backchannel timeout.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.TokenClientCredentialStyle">
+            <summary>
+            Gets or sets the authentication style used by the token client (defaults to posting clientid/secret values).
+            </summary>
+            <value>
+            The token client authentication style.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.Policy">
+            <summary>
+            Gets or sets the policy.
+            </summary>
+            <value>
+            The policy.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.LoggerFactory">
+            <summary>
+            Gets the logger factory.
+            </summary>
+            <value>
+            The logger factory.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.IdentityTokenValidator">
+            <summary>
+            Gets or sets the identity token validator.
+            </summary>
+            <value>
+            The logger factory.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.OidcClientOptions.FilteredClaims">
+            <summary>
+            Gets or sets the claims types that should be filtered.
+            </summary>
+            <value>
+            The filtered claims.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Policy">
+            <summary>
+            The validation policy for OidcClient
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.Discovery">
+            <summary>
+            Gets or sets the policy for discovery.
+            </summary>
+            <value>
+            The discovery.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.RequireAccessTokenHash">
+            <summary>
+            Gets or sets a value indicating whether at_hash is required (defaults to false).
+            </summary>
+            <value>
+            <c>true</c> if at_hash is required; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.RequireIdentityTokenOnRefreshTokenResponse">
+            <summary>
+            Gets or sets a value indicating whether an identity token is required on refresh token responses (defaults to false).
+            </summary>
+            <value>
+            <c>true</c> if [require identity token on refresh token response]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.RequireIdentityTokenSignature">
+            <summary>
+            Gets or sets a value indicating whether an identity token must be signed or not (unsigned identity tokens are only allowed in authorization code flow)
+            </summary>
+            <value>
+            <c>true</c> if identity token must be signed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.ValidateTokenIssuerName">
+            <summary>
+            Gets or sets a value indicating whether the identity token issuer name should match.
+            </summary>
+            <value><c>true</c> if identity token issuer name should match; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Policy.ValidSignatureAlgorithms">
+            <summary>
+            Gets or sets the supported identity token signing algorithms.
+            </summary>
+            <value>
+            The supported algorithms.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.ProviderInformation">
+            <summary>
+            Information about an OpenID Connect provider
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.IssuerName">
+            <summary>
+            Gets or sets the name of the issuer.
+            </summary>
+            <value>
+            The name of the issuer.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.KeySet">
+            <summary>
+            Gets or sets the key set.
+            </summary>
+            <value>
+            The key set.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.TokenEndpoint">
+            <summary>
+            Gets or sets the token endpoint.
+            </summary>
+            <value>
+            The token endpoint.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.AuthorizeEndpoint">
+            <summary>
+            Gets or sets the authorize endpoint.
+            </summary>
+            <value>
+            The authorize endpoint.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.EndSessionEndpoint">
+            <summary>
+            Gets or sets the end session endpoint.
+            </summary>
+            <value>
+            The end session endpoint.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.UserInfoEndpoint">
+            <summary>
+            Gets or sets the user information endpoint.
+            </summary>
+            <value>
+            The user information endpoint.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.TokenEndPointAuthenticationMethods">
+            <summary>
+            Gets or sets the token end point authentication methods.
+            </summary>
+            <value>
+            The token end point authentication methods.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.SupportsUserInfo">
+            <summary>
+            Gets a value indicating whether [supports user information].
+            </summary>
+            <value>
+              <c>true</c> if [supports user information]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.ProviderInformation.SupportsEndSession">
+            <summary>
+            Gets a value indicating whether [supports end session].
+            </summary>
+            <value>
+              <c>true</c> if [supports end session]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.RefreshTokenDelegatingHandler">
+            <summary>
+            HTTP message delegating handler that encapsulates token handling and refresh
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.Timeout">
+            <summary>
+            Gets or sets the timeout
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.AccessToken">
+            <summary>
+            Gets the current access token
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.RefreshToken">
+            <summary>
+            Gets the current refresh token
+            </summary>
+        </member>
+        <member name="E:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.TokenRefreshed">
+            <summary>
+            Occurs when the tokens were refreshed successfully
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.#ctor(IdentityModel.OidcClient.OidcClient,System.String,System.String,System.String,System.Net.Http.HttpMessageHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.RefreshTokenDelegatingHandler" /> class.
+            </summary>
+            <param name="oidcClient">The oidc client.</param>
+            <param name="accessToken">The access token.</param>
+            <param name="refreshToken">The refresh token.</param>
+            <param name="tokenType">The token type.</param>
+            <param name="innerHandler">The inner handler.</param>
+            <exception cref="T:System.ArgumentNullException">oidcClient</exception>
+        </member>
+        <member name="M:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Sends an HTTP request to the inner handler to send to the server as an asynchronous operation.
+            </summary>
+            <param name="request">The HTTP request message to send to the server.</param>
+            <param name="cancellationToken">A cancellation token to cancel operation.</param>
+            <returns>
+            Returns <see cref="T:System.Threading.Tasks.Task`1" />. The task object representing the asynchronous operation.
+            </returns>
+        </member>
+        <member name="M:IdentityModel.OidcClient.RefreshTokenDelegatingHandler.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:System.Net.Http.DelegatingHandler" />, and optionally disposes of the managed resources.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to releases only unmanaged resources.</param>
+        </member>
+        <member name="T:IdentityModel.OidcClient.LoginRequest">
+            <summary>
+            A login request.
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginRequest.BrowserDisplayMode">
+            <summary>
+            Gets or sets the browser display mode.
+            </summary>
+            <value>
+            The browser display mode.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginRequest.BrowserTimeout">
+            <summary>
+            Gets or sets the browser timeout.
+            </summary>
+            <value>
+            The browser timeout.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginRequest.FrontChannelExtraParameters">
+            <summary>
+            Gets or sets extra parameters for the front-channel request.
+            </summary>
+            <value>
+            The extra parameters.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginRequest.BackChannelExtraParameters">
+            <summary>
+            Gets or sets extra parameters for the back-channel request.
+            </summary>
+            <value>
+            The extra parameters.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.LogoutRequest">
+            <summary>
+            A logout request
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LogoutRequest.BrowserDisplayMode">
+            <summary>
+            Gets or sets the browser display mode.
+            </summary>
+            <value>
+            The browser display mode.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LogoutRequest.BrowserTimeout">
+            <summary>
+            Gets or sets the browser timeout.
+            </summary>
+            <value>
+            The browser timeout.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LogoutRequest.IdTokenHint">
+            <summary>
+            Gets or sets the id_token_hint.
+            </summary>
+            <value>
+            The identifier token hint.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LogoutRequest.State">
+            <summary>
+            Gets or sets the state.
+            </summary>
+            <value>
+            The state value passed back to client as query string on post_logout_redirect_uri
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Results.IdentityTokenValidationResult">
+            <summary>
+            Identity token validation result
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.IdentityTokenValidationResult.User">
+            <summary>
+            The user represented by the identity token
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.IdentityTokenValidationResult.SignatureAlgorithm">
+            <summary>
+            The signature algorithm of the identity token 
+            </summary>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Results.RefreshTokenResult">
+            <summary>
+            The result of a refresh token request.
+            </summary>
+            <seealso cref="T:IdentityModel.OidcClient.Result" />
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.RefreshTokenResult.IdentityToken">
+            <summary>
+            Gets or sets the identity token.
+            </summary>
+            <value>
+            The identity token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.RefreshTokenResult.AccessToken">
+            <summary>
+            Gets or sets the access token.
+            </summary>
+            <value>
+            The access token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.RefreshTokenResult.RefreshToken">
+            <summary>
+            Gets or sets the refresh token.
+            </summary>
+            <value>
+            The refresh token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.RefreshTokenResult.ExpiresIn">
+            <summary>
+            Gets or sets the expires in (seconds).
+            </summary>
+            <value>
+            The expires in.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.RefreshTokenResult.AccessTokenExpiration">
+            <summary>
+            Gets or sets the access token expiration.
+            </summary>
+            <value>
+            The access token expiration.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Results.UserInfoResult">
+            <summary>
+            The result of a userinfo request.
+            </summary>
+            <seealso cref="T:IdentityModel.OidcClient.Result" />
+        </member>
+        <member name="P:IdentityModel.OidcClient.Results.UserInfoResult.Claims">
+            <summary>
+            Gets or sets the claims.
+            </summary>
+            <value>
+            The claims.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.LoginResult">
+            <summary>
+            The result of a login.
+            </summary>
+            <seealso cref="T:IdentityModel.OidcClient.Result" />
+        </member>
+        <member name="M:IdentityModel.OidcClient.LoginResult.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.LoginResult"/> class.
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.LoginResult.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.LoginResult"/> class.
+            </summary>
+            <param name="error">The error.</param>
+        </member>
+        <member name="M:IdentityModel.OidcClient.LoginResult.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.LoginResult"/> class.
+            </summary>
+            <param name="error">The error.</param>
+            <param name="errorDescription">The error description.</param>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.User">
+            <summary>
+            Gets or sets the user.
+            </summary>
+            <value>
+            The user.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.AccessToken">
+            <summary>
+            Gets or sets the access token.
+            </summary>
+            <value>
+            The access token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.IdentityToken">
+            <summary>
+            Gets or sets the identity token.
+            </summary>
+            <value>
+            The identity token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.RefreshToken">
+            <summary>
+            Gets or sets the refresh token.
+            </summary>
+            <value>
+            The refresh token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.AccessTokenExpiration">
+            <summary>
+            Gets or sets the access token expiration.
+            </summary>
+            <value>
+            The access token expiration.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.AuthenticationTime">
+            <summary>
+            Gets or sets the authentication time.
+            </summary>
+            <value>
+            The authentication time.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.RefreshTokenHandler">
+            <summary>
+            Gets or sets the refresh token handler.
+            </summary>
+            <value>
+            The refresh token handler.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LoginResult.TokenResponse">
+            <summary>
+            Gets or sets the TokenResponse.
+            </summary>
+            <value>
+            The token response from the server.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.LogoutResult">
+            <summary>
+            Models the result of a logout
+            </summary>
+            <seealso cref="T:IdentityModel.OidcClient.Result" />
+        </member>
+        <member name="M:IdentityModel.OidcClient.LogoutResult.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.LogoutResult"/> class.
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.LogoutResult.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.LogoutResult"/> class.
+            </summary>
+            <param name="error">The error.</param>
+        </member>
+        <member name="P:IdentityModel.OidcClient.LogoutResult.Response">
+            <summary>
+            Gets or sets the response.
+            </summary>
+            <value>
+            The response.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.Result">
+            <summary>
+            Base class for results.
+            </summary>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Result.IsError">
+            <summary>
+            Gets a value indicating whether this instance is error.
+            </summary>
+            <value>
+              <c>true</c> if this instance is error; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Result.Error">
+            <summary>
+            Gets or sets the error.
+            </summary>
+            <value>
+            The error.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.Result.ErrorDescription">
+            <summary>
+            Gets or sets the error description.
+            </summary>
+            <value>
+            The error description.
+            </value>
+        </member>
+        <member name="T:IdentityModel.OidcClient.TokenRefreshedEventArgs">
+            <summary>
+            Event argument with the refreshed token
+            </summary>
+        </member>
+        <member name="M:IdentityModel.OidcClient.TokenRefreshedEventArgs.#ctor(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityModel.OidcClient.TokenRefreshedEventArgs" /> class.
+            </summary>
+            <param name="accessToken">The access token.</param>
+            <param name="refreshToken">The refresh token.</param>
+            <param name="expiresIn">The expires in.</param>
+            <param name="identityToken">The identity token (optional).</param>
+        </member>
+        <member name="P:IdentityModel.OidcClient.TokenRefreshedEventArgs.AccessToken">
+            <summary>
+            Gets the access token.
+            </summary>
+            <value>
+            The access token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.TokenRefreshedEventArgs.RefreshToken">
+            <summary>
+            Gets the refresh token.
+            </summary>
+            <value>
+            The refresh token.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.TokenRefreshedEventArgs.ExpiresIn">
+            <summary>
+            Gets or sets the expires in.
+            </summary>
+            <value>
+            The expires in.
+            </value>
+        </member>
+        <member name="P:IdentityModel.OidcClient.TokenRefreshedEventArgs.IdentityToken">
+            <summary>
+            Gets the identity token.
+            </summary>
+            <value>
+            The identity token.
+            </value>
+        </member>
+    </members>
+</doc>
