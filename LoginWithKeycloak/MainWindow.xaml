@@ -11,7 +11,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <WebBrowser x:Name="Browser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Navigated="Browser_Navigated"/>
-        <Button Content="Login" Click="LoginButton_Click" Grid.Row="1" HorizontalAlignment="Center" Margin="5"/>
+        <WebBrowser x:Name="Browser" Navigated="Browser_Navigated"/>
+        <Button Grid.Row="1" Content="Login" Click="LoginButton_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
     </Grid>
 </Window>

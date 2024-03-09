@@ -11,47 +11,35 @@ namespace LoginWithKeycloak
         private readonly HttpClient _httpClient;
         private readonly string _tokenEndpoint;
         private readonly string _clientId;
-        private readonly string _clientSecret;
 
-        public KeycloakClient(string keycloakBaseUrl, string clientId, string clientSecret)
+        public KeycloakClient(string keycloakBaseUrl, string clientId)
         {
             _httpClient = new HttpClient();
-            _tokenEndpoint = $"{keycloakBaseUrl}/realms/AnishTestRealm/protocol/openid-connect/token";
             _clientId = clientId;
-            _clientSecret = clientSecret;
         }
 
-        public async Task<(string AccessToken, string IdToken)> GetTokensAsync(string code, string redirectUri)
+        public async Task<(string AccessToken, string IdToken)> GetTokensAsync(string code, string codeVerifier, string redirectUri,WellKnownConfiguration wellKnownConfiguration )
         {
             var content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
                 { "client_id", _clientId },
-                { "client_secret", _clientSecret },
                 { "code", code },
-                { "redirect_uri", redirectUri }
+                { "redirect_uri", redirectUri },
+                { "code_verifier", codeVerifier }
             });
 
-            var response = await _httpClient.PostAsync(_tokenEndpoint, content);
+            var response = await _httpClient.PostAsync(wellKnownConfiguration.token_endpoint, content);
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($"Token request failed: {response.ReasonPhrase}");
             }
 
-            var c = await response.Content.ReadAsStringAsync();
-            var tokenResponse =  JsonSerializer.Deserialize<TokenResponse>(c);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(responseContent);
+
             return (tokenResponse.AccessToken, tokenResponse.IdToken);
-            //
-            //     return (tokenResponse.AccessToken, tokenResponse.IdToken);
-            // using (var stream = await response.Content.ReadAsStreamAsync())
-            // {
-            //     // Deserialize the response content
-            //     var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(stream);
-            //
-            //     return (tokenResponse.AccessToken, tokenResponse.IdToken);
-            // }
         }
-        
     }
 }
