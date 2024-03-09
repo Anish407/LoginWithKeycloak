@@ -21,6 +21,8 @@
 - The GenerateCodeVerifier and GenerateCodeChallenge methods generate the code verifier and code challenge, respectively, required for PKCE.
 - The Base64UrlEncode method encodes bytes to a Base64 URL-safe string, which is used in PKCE.
 
+## PENDING
+- INTEGRATE KEYCLOAK WITH AZURE AD (SO THAT WE CAN USE THE EXISTING USERS IN AZURE AD)
 
 #### References
 <ul>
