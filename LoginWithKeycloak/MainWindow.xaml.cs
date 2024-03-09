@@ -26,14 +26,13 @@ namespace LoginWithKeycloak
         private WellKnownConfiguration _wellKnownConfiguration = new WellKnownConfiguration();
 
 
-        private readonly HttpClient _httpClient;
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             _keycloakClient = new KeycloakClient(ClientId);
-            _httpClient = new HttpClient();
         }
 
         private  void MainWindow_Loaded(object sender, RoutedEventArgs e)

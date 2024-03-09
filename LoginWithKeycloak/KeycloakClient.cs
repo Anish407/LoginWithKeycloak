@@ -17,13 +17,12 @@ namespace LoginWithKeycloak
 
     public class KeycloakClient : IKeycloakClient
     {
-        private readonly HttpClient _httpClient;
+        private static readonly HttpClient _httpClient = new HttpClient();
         private readonly string _tokenEndpoint;
         private readonly string _clientId;
 
         public KeycloakClient(string clientId)
         {
-            _httpClient = new HttpClient();
             _clientId = clientId;
         }
 
