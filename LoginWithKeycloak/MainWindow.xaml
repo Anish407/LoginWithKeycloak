@@ -7,11 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <WebBrowser x:Name="Browser" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Navigated="Browser_Navigated"/>
-        <Button Content="Login" Click="LoginButton_Click" Grid.Row="1" HorizontalAlignment="Center" Margin="5"/>
+        <WebBrowser Name="webBrowser" Navigating="WebBrowser_Navigating"/>
     </Grid>
 </Window>

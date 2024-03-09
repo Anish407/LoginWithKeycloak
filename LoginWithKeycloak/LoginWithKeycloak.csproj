@@ -94,8 +94,11 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="Components\WpfEmbeddedBrowser.cs" />
         <Compile Include="KeycloakClient.cs" />
-        <Compile Include="WpfEmbeddedBrowser.cs" />
+        <Compile Include="Models\OpenIdConfiguration.cs" />
+        <Compile Include="Models\TokenRequestDto.cs" />
+        <Compile Include="Models\TokenResponse.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -110,6 +113,7 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Models\WellKnownConfiguration.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>

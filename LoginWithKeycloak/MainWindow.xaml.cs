@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Windows;
-using System.Windows.Controls;
-using IdentityModel.Client;
+using System.Windows.Navigation;
 
 namespace LoginWithKeycloak
 {
@@ -11,53 +13,105 @@ namespace LoginWithKeycloak
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string KeycloakUrl = "http://localhost:8080/";
+        private const string KeycloakAuthority = "http://localhost:8080/realms/AnishTestRealm";
         private const string ClientId = "WPFAPP";
-        private const string ClientSecret = "UYggTukD6J9y6pukl9vB39FlaJQq9KEg";
-        private const string RedirectUri = "http://localhost:8081/callback";
-        private const string RealmName = "AnishTestRealm";
+
+        private const string
+            RedirectUri = "http://localhost:8081/callback"; // Should match the redirect URI configured in Keycloak
+
+        private const string Scope = "openid profile email";
+        private string _codeVerifier = "";
 
         private readonly KeycloakClient _keycloakClient;
+        private WellKnownConfiguration _wellKnownConfiguration = new WellKnownConfiguration();
+
+
+        private readonly HttpClient _httpClient;
 
         public MainWindow()
         {
             InitializeComponent();
-            _keycloakClient = new KeycloakClient(KeycloakUrl, ClientId, ClientSecret);
+            Loaded += MainWindow_Loaded;
+            _keycloakClient = new KeycloakClient(ClientId);
+            _httpClient = new HttpClient();
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private  void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Redirect the user to the Keycloak login page
-            var loginUrl = $"{KeycloakUrl}/realms/{RealmName}/protocol/openid-connect/auth?response_type=code&client_id={ClientId}&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}&scope=openid%20profile%20email";
-            Browser.Navigate(new Uri(loginUrl));
+            // Navigate to Keycloak login page when window is loaded
+            NavigateToKeycloakLoginPage();
         }
 
-        private async void Browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private async void NavigateToKeycloakLoginPage()
         {
-            // Check if the URL contains the authorization code
+            _wellKnownConfiguration = await _keycloakClient.GetWellKnownEndpointInfo(KeycloakAuthority);
+           
+            // Generate a code verifier and code challenge
+            _codeVerifier = GenerateCodeVerifier();
+            string codeChallenge = GenerateCodeChallenge(_codeVerifier);
+
+            // Construct the Keycloak login URL with appropriate parameters
+            string authorizeUrl = $"{_wellKnownConfiguration.authorization_endpoint}" +
+                                  $"?client_id={ClientId}" +
+                                  $"&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}" +
+                                  $"&response_type=code" +
+                                  $"&scope={Scope}" +
+                                  $"&code_challenge={codeChallenge}" +
+                                  $"&code_challenge_method=S256"; // Using PKCE with SHA-256 code challenge method
+
+            // Navigate the WebBrowser control to the Keycloak login page
+            webBrowser.Navigate(authorizeUrl);
+        }
+
+        private string GenerateCodeVerifier()
+        {
+            // Generate a random code verifier (43-128 characters)
+            Random random = new Random();
+            byte[] buffer = new byte[32];
+            random.NextBytes(buffer);
+            return Base64UrlEncode(buffer);
+        }
+
+        private string GenerateCodeChallenge(string codeVerifier)
+        {
+            // Generate SHA-256 hash of the code verifier
+            byte[] bytes = Encoding.UTF8.GetBytes(codeVerifier);
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(bytes);
+                return Base64UrlEncode(hashBytes);
+            }
+        }
+
+        private string Base64UrlEncode(byte[] bytes)
+        {
+            string base64 = Convert.ToBase64String(bytes);
+            return base64.Replace('+', '-').Replace('/', '_').TrimEnd('=');
+        }
+
+        private async void WebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            // Check if the URL being navigated to matches the redirect URI
             if (e.Uri.AbsoluteUri.StartsWith(RedirectUri))
             {
-                var uri = new Uri(e.Uri.AbsoluteUri);
-                var query = HttpUtility.ParseQueryString(uri.Query);
-                var code = query.Get("code");
+                // Extract authentication response parameters from the query string
+                var queryParameters = HttpUtility.ParseQueryString(e.Uri.Query);
+                string code = queryParameters["code"];
+                string state = queryParameters["state"];
 
-                if (!string.IsNullOrEmpty(code))
+                // Process the authentication response (e.g., exchange code for tokens)
+                //await ProcessAuthenticationResponse(code, _codeVerifier);
+                (string accessToken, string idToken)  = await _keycloakClient.GetAccessToken(_wellKnownConfiguration, new TokenRequestDto()
                 {
-                    // Exchange the authorization code for tokens
-                    var (accessToken, idToken) = await _keycloakClient.GetTokensAsync(code, RedirectUri);
-
-                    // Use the access token and ID token as needed
-                    MessageBox.Show($"Access Token: {accessToken}\nID Token: {idToken}");
-                }
+                    RedirectUri = RedirectUri,
+                    CodeVerifier = _codeVerifier,
+                    AuthCode = code
+                });
+                MessageBox.Show($"AccessToken:{accessToken}, IdToken:{idToken}");
+               
+                // Cancel the navigation to prevent the WebBrowser from loading the redirect URI
+                e.Cancel = true;
             }
         }
     }
-
-    public class TokenResponse
-    {
-        public string AccessToken { get; set; }
-        public string IdToken { get; set; }
-    }
 }
-
-   
