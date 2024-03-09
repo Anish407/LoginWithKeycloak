@@ -96,6 +96,8 @@
         </ApplicationDefinition>
         <Compile Include="Components\WpfEmbeddedBrowser.cs" />
         <Compile Include="KeycloakClient.cs" />
+        <Compile Include="Models\OpenIdConfiguration.cs" />
+        <Compile Include="Models\TokenRequestDto.cs" />
         <Compile Include="Models\TokenResponse.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
