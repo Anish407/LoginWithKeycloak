@@ -39,7 +39,7 @@ namespace LoginWithKeycloak
             var responseContent = await response.Content.ReadAsStringAsync();
             var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(responseContent);
 
-            return (tokenResponse.AccessToken, tokenResponse.IdToken);
+            return (tokenResponse.Access_Token, tokenResponse.IdToken);
         }
     }
 }

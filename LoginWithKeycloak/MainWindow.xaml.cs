@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Navigation;
 using IdentityModel.Client;
 
 namespace LoginWithKeycloak
@@ -12,79 +13,53 @@ namespace LoginWithKeycloak
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-   public partial class MainWindow : Window
+  public partial class MainWindow : Window
     {
-        private const string KeycloakBaseUrl = "http://localhost:8080";
+        private const string KeycloakAuthority = "http://localhost:8080/realms/AnishTestRealm";
         private const string ClientId = "WPFAPP";
-        private const string RedirectUri = "http://localhost:8081/callback";
-        private readonly KeycloakClient _keycloakClient;
-        private readonly string _realmName = "AnishTestRealm";
-        private string _codeVerifier;
-        private WellKnownConfiguration _configurationDetails;
+        private const string RedirectUri ="http://localhost:8081/callback"; // Should match the redirect URI configured in Keycloak
+        private const string Scope = "openid profile email";
+        private  string _codeVerifier = "";
+   
+
+        private readonly HttpClient _httpClient;
 
         public MainWindow()
         {
             InitializeComponent();
-            _keycloakClient = new KeycloakClient(KeycloakBaseUrl, ClientId);
+            Loaded += MainWindow_Loaded;
+
+            _httpClient = new HttpClient();
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _configurationDetails = await CallWellKnowEndpoint();
+            // Navigate to Keycloak login page when window is loaded
+            NavigateToKeycloakLoginPage();
+        }
+
+        private void NavigateToKeycloakLoginPage()
+        {
+            // Generate a code verifier and code challenge
             _codeVerifier = GenerateCodeVerifier();
             string codeChallenge = GenerateCodeChallenge(_codeVerifier);
-            string loginUrl = $"{_configurationDetails.authorization_endpoint}?response_type=code&client_id={ClientId}&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}&scope=openid&code_challenge={HttpUtility.UrlEncode(codeChallenge)}&code_challenge_method=S256";
-            Browser.Navigate(new Uri(loginUrl));
+
+            // Store the code verifier for later use in token exchange
+            // You may want to store it securely or pass it through navigation context
+
+            // Construct the Keycloak login URL with appropriate parameters
+            string authorizeUrl = $"{KeycloakAuthority}/protocol/openid-connect/auth" +
+                                  $"?client_id={ClientId}" +
+                                  $"&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}" +
+                                  $"&response_type=code" +
+                                  $"&scope={Scope}" +
+                                  $"&code_challenge={codeChallenge}" +
+                                  $"&code_challenge_method=S256"; // Using PKCE with SHA-256 code challenge method
+
+            // Navigate the WebBrowser control to the Keycloak login page
+            webBrowser.Navigate(authorizeUrl);
         }
-
-        private  async ValueTask<WellKnownConfiguration> CallWellKnowEndpoint()
-        {
-            // Dont call the configuration endpoint always
-            if (_configurationDetails != null)
-            {
-                return _configurationDetails;
-            }
-            string wellKnownEndpoint = $"{KeycloakBaseUrl}/realms/{_realmName}/.well-known/openid-configuration";
-
-            try
-            {
-                var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync(wellKnownEndpoint);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<WellKnownConfiguration>(content);
-                }
-                else
-                {
-                    throw new Exception($"Cannot read Configuration details from Keycloak: URL:{wellKnownEndpoint}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw;
-            }
-        }
-
-        private async void Browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-            string url = e.Uri.AbsoluteUri;
-
-            if (url.StartsWith(RedirectUri))
-            {
-                var query = HttpUtility.ParseQueryString(e.Uri.Query);
-                string code = query.Get("code");
-
-                if (!string.IsNullOrEmpty(code))
-                {
-                    var (accessToken, idToken) = await _keycloakClient.GetTokensAsync(code, _codeVerifier, RedirectUri, _configurationDetails);
-                    MessageBox.Show($"Access Token: {accessToken}\nID Token: {idToken}");
-                }
-            }
-        }
-
+        
         private string GenerateCodeVerifier()
         {
             // Generate a random code verifier (43-128 characters)
@@ -110,8 +85,57 @@ namespace LoginWithKeycloak
             string base64 = Convert.ToBase64String(bytes);
             return base64.Replace('+', '-').Replace('/', '_').TrimEnd('=');
         }
+
+        private async void WebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            // Check if the URL being navigated to matches the redirect URI
+            if (e.Uri.AbsoluteUri.StartsWith(RedirectUri))
+            {
+                // Extract authentication response parameters from the query string
+                var queryParameters = HttpUtility.ParseQueryString(e.Uri.Query);
+                string code = queryParameters["code"];
+                string state = queryParameters["state"];
+
+                // Process the authentication response (e.g., exchange code for tokens)
+                await ProcessAuthenticationResponse(code, state, _codeVerifier);
+
+                // Cancel the navigation to prevent the WebBrowser from loading the redirect URI
+                e.Cancel = true;
+            }
+        }
+
+        private async Task ProcessAuthenticationResponse(string code, string state, string codeVerifier)
+        {
+            // Exchange authorization code for tokens using HttpClient
+            var tokenRequestContent = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("client_id", ClientId),
+                new KeyValuePair<string, string>("redirect_uri", RedirectUri),
+                new KeyValuePair<string, string>("code", code),
+                new KeyValuePair<string, string>("code_verifier", codeVerifier), // Include the code verifier
+                new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                new KeyValuePair<string, string>("Content-Type", "application/json")
+            });
+
+            var response = await _httpClient.PostAsync($"{KeycloakAuthority}/protocol/openid-connect/token", tokenRequestContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Parse and process token response
+                var tokenResponseContent = await response.Content.ReadAsStringAsync();
+                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(tokenResponseContent);
+
+                string accessToken = tokenResponse.Access_Token;
+                string idToken = tokenResponse.IdToken;
+
+                MessageBox.Show($"Access Token: {accessToken}\nID Token: {idToken}");
+            }
+            else
+            {
+                MessageBox.Show($"Error occurred while requesting tokens: {response.ReasonPhrase}");
+            }
+        }
     }
 }
-
 
    
