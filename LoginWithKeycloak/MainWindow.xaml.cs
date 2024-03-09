@@ -98,8 +98,8 @@ namespace LoginWithKeycloak
                 string code = queryParameters["code"];
                 string state = queryParameters["state"];
 
-                // Process the authentication response (e.g., exchange code for tokens)
-                //await ProcessAuthenticationResponse(code, _codeVerifier);
+                // Call the token endpoint to get the access + IdToken
+                // We pass the code verifier and not the code challenge
                 (string accessToken, string idToken)  = await _keycloakClient.GetAccessToken(_wellKnownConfiguration, new TokenRequestDto()
                 {
                     RedirectUri = RedirectUri,
