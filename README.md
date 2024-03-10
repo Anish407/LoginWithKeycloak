@@ -21,8 +21,24 @@
 - The GenerateCodeVerifier and GenerateCodeChallenge methods generate the code verifier and code challenge, respectively, required for PKCE.
 - The Base64UrlEncode method encodes bytes to a Base64 URL-safe string, which is used in PKCE.
 
+#### KeyCloak Configuration
+- I have created a separate realm(similar to tenants in azure ad) in keycloak
+##### Create a client
+![image](https://github.com/Anish407/LoginWithKeycloak/assets/51234038/67f76725-9ce8-4f7a-b115-777671b772a5)
+
+
+
+  ![image](https://github.com/Anish407/LoginWithKeycloak/assets/51234038/91015ecc-f9d7-402a-9b43-940b1baa3d8f)
+  ![image](https://github.com/Anish407/LoginWithKeycloak/assets/51234038/244c2e37-c12a-41d5-86e9-c53c7185d33a)
+  ![image](https://github.com/Anish407/LoginWithKeycloak/assets/51234038/628c2306-b225-4c40-aa2a-067e73de9494)
+
+<p>
+ Client authentication-> This defines the type of the OIDC client. When it's ON, the OIDC type is set to confidential access type. When it's OFF, it is set to public access type
+</p>
+
 ## PENDING
 - INTEGRATE KEYCLOAK WITH AZURE AD (EXISTING USERS IN AZURE AD CAN LOGIN TO THE APP USING THEIR CREDENTIALS)
+
 
 #### References
 <ul>
