@@ -26,29 +26,6 @@ namespace LoginWithKeycloak
             _clientId = clientId;
         }
 
-        // public async Task<(string AccessToken, string IdToken)> GetTokensAsync(string code, string codeVerifier, string redirectUri,WellKnownConfiguration wellKnownConfiguration )
-        // {
-        //     var content = new FormUrlEncodedContent(new Dictionary<string, string>
-        //     {
-        //         { "grant_type", "authorization_code" },
-        //         { "client_id", _clientId },
-        //         { "code", code },
-        //         { "redirect_uri", redirectUri },
-        //         { "code_verifier", codeVerifier }
-        //     });
-        //
-        //     var response = await _httpClient.PostAsync(wellKnownConfiguration.token_endpoint, content);
-        //
-        //     if (!response.IsSuccessStatusCode)
-        //     {
-        //         throw new Exception($"Token request failed: {response.ReasonPhrase}");
-        //     }
-        //
-        //     var responseContent = await response.Content.ReadAsStringAsync();
-        //     var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<TokenResponse>(responseContent);
-        //
-        //     return (tokenResponse.Access_Token, tokenResponse.IdToken);
-        // }
         public async Task<WellKnownConfiguration> GetWellKnownEndpointInfo(string keyCloakBaseUrl)
         {
             string discoveryEndpoint = $"{keyCloakBaseUrl}/.well-known/openid-configuration";
@@ -78,12 +55,13 @@ namespace LoginWithKeycloak
                 new KeyValuePair<string, string>("code", tokenRequestDto.AuthCode),
                 new KeyValuePair<string, string>("code_verifier", tokenRequestDto.CodeVerifier), // Include the code verifier
                 new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                new KeyValuePair<string, string>("Content-Type", "application/json")
+                new KeyValuePair<string, string>("Content-Type", "application/json"),
+                new KeyValuePair<string, string>("Scope", "openId profile email"),
             });
-
+            
             try
             {
-                var response = await _httpClient.PostAsync($"{openIdConfigurationDto.issuer}/protocol/openid-connect/token",
+                var response = await _httpClient.PostAsync(openIdConfigurationDto.token_endpoint,
                     tokenRequestContent);
                
                 response.EnsureSuccessStatusCode();
