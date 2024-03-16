@@ -1,0 +1,11 @@
+﻿# Clear Internet Explorer cache
+Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 8" -NoNewWindow -Wait
+
+# Clear cookies
+Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 2" -NoNewWindow -Wait
+
+# Clear history
+Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 1" -NoNewWindow -Wait
+
+# Clear form data
+Start-Process -FilePath "RunDll32.exe" -ArgumentList "InetCpl.cpl,ClearMyTracksByProcess 16" -NoNewWindow -Wait
