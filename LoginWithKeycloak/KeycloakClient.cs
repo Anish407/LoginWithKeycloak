@@ -64,7 +64,7 @@ namespace LoginWithKeycloak
                 var response = await _httpClient.PostAsync(openIdConfigurationDto.token_endpoint,
                     tokenRequestContent);
                
-                //response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
                
                 // Parse and process token response
                 var tokenResponseContent = await response.Content.ReadAsStringAsync();
