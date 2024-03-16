@@ -17,7 +17,7 @@ namespace LoginWithKeycloak
         private const string ClientId = "WPFAPP";
 
         private const string
-            RedirectUri = "http://localhost:8081/callback"; // Should match the redirect URI configured in Keycloak
+            RedirectUri = "app://localhost:8080/callback"; // Should match the redirect URI configured in Keycloak
 
         private const string Scope = "openid profile email";
         private string _codeVerifier = "";
